@@ -1,0 +1,83 @@
+# Python program for constructing and maintaining a BST
+# PREDECESSOR version 
+# 2021.5.30
+
+class tnode:
+    def __init__(self):
+        self.data=0
+        self.count=0
+        self.left=self.right=None
+
+def  tree(p, ww):
+    if p.data==0: 
+        p.data = ww
+        p.count = 1      
+    elif ww==p.data:
+        p.count+=1 
+    elif ww<p.data:
+        if p.left is None:
+            p.left = tnode()
+        p.left = tree(p.left,ww)
+    else: #ww>p.data
+        if p.right is None:
+            p.right = tnode()
+        p.right = tree(p.right,ww)
+    return p
+
+def treeprint(p):    # inorder 
+    global dp
+    if p != None:
+        dp+=1
+        treeprint(p.left)
+        dp-=1
+        print("%4d - %2d %2d"%(p.data,p.count,dp) )
+        dp+=1
+        treeprint(p.right)
+        dp-=1
+
+def node_max(p):
+    while p.right is not None:
+        p = p.right
+    return p
+
+def node_min(p):
+    while p.left is not None:
+        p = p.left
+    return p
+
+def detree(p, ww): 
+    if p is None:
+        print("Not found in the BST !")
+        return p
+    if ww < p.data:
+        p.left = detree(p.left, ww)
+    elif ww > p.data :
+        p.right = detree(p.right, ww)
+    else: # ww==p.data
+        # node with no child or only one child
+        if p.left is None:
+            temp= p.right
+            p= None
+            return temp
+        if p.right is None:
+            temp= p.left
+            p= None
+            return temp
+        # node with two children:
+        # get the inorder predecessor (largest node in the left subtree) 
+        temp= node_max(p.left)  ##(1)##
+        # copy its content to this node
+        p.data= temp.data
+        # delete the inorder predecessor
+        p.left= detree(p.left,temp.data)  ##(2)##
+    return p
+
+# main program   
+root=tnode()
+for x in [51,29,16,13,14,12,96,67,65,43]:
+    root= tree(root, x)
+for x in [87,51,29,16,13,14,12,96,67,65,43,43]:
+    print("remove data %d"%x)
+    root= detree(root, x)
+    dp=0
+    treeprint(root)
