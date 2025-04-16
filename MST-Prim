@@ -1,0 +1,32 @@
+# Create an MST using Prim's algorithm (2025-04-19)
+V = 9
+edge_cost= [(0,1,4),(0,7,8),(1,2,8),(1,7,11),(2,3,7),(2,5,4),(2,8,2),(3,4,9),(3,5,14),(4,5,10),(5,6,2),(6,7,1),(6,8,6),(7,8,7)]
+adj = [[] for _ in range(V)]  # neighbors of a vertex
+for  (u,v,w)  in  edge_cost :
+    adj[u].append((v, w))
+    adj[v].append((u, w)) 
+INF = 999
+key = [INF] * V  # the min weight of a incident edges of a vertex
+parent = [-1] * V  # the precedent vertex in the tree
+pq = []  # priority queue to store vertices that are being processed, like (vertex,key)
+in_mst = [False] * V # vertices included in MST
+src = 0  # start from vertex 0
+key[src] = 0
+pq.append((src,0))
+# the tuple records a vertex and its key
+while len(pq)>0 : # all vertices should be processed once
+    pq = sorted(pq, key=lambda d:d[1]) 
+    u = pq.pop(0)[0]
+    if not in_mst[u]:
+        in_mst[u] = True  # add the vertex to MST
+        for (v, w) in adj[u]:
+            if not in_mst[v] and key[v] > w:
+                key[v] = w
+                parent[v] = u
+                pq.append((v, key[v]))
+mincost = 0
+for i in range(V) :
+    if i != src :
+        mincost += key[i]
+        print('Edge {}:({}, {}) cost:{}'.format(i, i, parent[i], key[i]))
+print("Minimum cost= {}".format(mincost))
