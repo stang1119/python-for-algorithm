@@ -1,0 +1,28 @@
+def bfs(v) :  # BFS from node v
+    front= 0
+    rear= 0
+    visited[v]= 1
+    que[rear]= v  # put v into the queue
+    while front <= rear :
+        vv= que[front]  # get vv from the queue 
+        front+= 1 
+        for i in range(N) :
+            if a[vv][i] and not visited[i] :
+                print("%d->%d " %(vv,i), end=' ')
+                visited[i]= 1
+                rear+= 1           
+                que[rear]= i
+global N, visited, a, que
+N=9
+a=[ [0,1,1,1,0,0,0,0,0],
+      [1,0,0,0,0,0,0,0,0],
+      [1,0,0,0,0,0,1,1,0],
+      [1,0,0,0,1,1,0,0,0],
+      [0,0,0,1,0,0,0,0,0],
+      [0,0,0,1,0,0,1,0,1],
+      [0,0,1,0,0,1,0,1,0],
+      [0,0,1,0,0,0,1,0,0],
+      [0,0,0,0,0,1,0,0,0] ]
+que= [0]*50  # maxsize of the queue
+visited= [0]*N
+bfs(0)
